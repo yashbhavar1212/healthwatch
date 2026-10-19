@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Report cases{% endblock %}
+{% block content %}
+<section class="wrap page-pad entry-grid">
+  <div>
+    <h1 class="h1">Report cases</h1>
+    <p class="lead">Add your village first, then report cases for it.</p>
+
+    <div class="panel">
+      <h2 class="h3"><span class="step-n">1</span>Add a village</h2>
+      <form class="form-grid" id="villageForm" novalidate>
+        <div class="field"><label for="vName">Village name</label><input id="vName" maxlength="60" autocomplete="off" required></div>
+        <div class="field"><label for="vDistrict">District (optional)</label><input id="vDistrict" maxlength="60" autocomplete="off"></div>
+        <div class="field"><label for="vPop">Population (optional)</label><input id="vPop" type="number" min="0" inputmode="numeric"></div>
+        <div class="field form-end"><button class="btn btn-solid" type="submit" id="villageBtn">Add village</button></div>
+      </form>
+      <p class="form-error" id="villageError" role="alert" hidden></p>
+
+      <h3 class="h3 mt-s">Your villages <span class="muted" id="villageCount"></span></h3>
+      <div class="table-wrap">
+        <table class="data compact" id="villageTable">
+          <thead><tr><th>Village</th><th class="num">Reports</th><th><span class="sr">Actions</span></th></tr></thead>
+          <tbody id="villageBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <form class="panel form-grid mt" id="entryForm" novalidate>
+      <h2 class="h3 span2"><span class="step-n">2</span>Report cases</h2>
+      <p class="empty-note span2" id="noVillage" hidden>No villages yet. Add a village above, then come back to this form.</p>
+      <fieldset class="bare form-grid span2" id="entryFields" disabled>
+        <div class="field span2">
+          <label for="village">Village</label>
+          <select id="village" name="village_id" required><option value="">Loading villages...</option></select>
+          <small class="hint" id="villageInfo"></small>
+        </div>
+        <div class="field">
+          <label for="diarrhea">Diarrhea cases</label>
+          <input id="diarrhea" type="number" inputmode="numeric" min="0" max="5000" placeholder="0" required>
+        </div>
+        <div class="field">
+          <label for="fever">Fever cases</label>
+          <input id="fever" type="number" inputmode="numeric" min="0" max="5000" placeholder="0" required>
+        </div>
+        <fieldset class="field">
+          <legend>Rainfall this week</legend>
+          <div class="seg" id="rain">
+            <label><input type="radio" name="rain" value="Low"><span>Low</span></label>
+            <label><input type="radio" name="rain" value="Medium" checked><span>Medium</span></label>
+            <label><input type="radio" name="rain" value="High"><span>High</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="field">
+          <legend>Drinking water</legend>
+          <div class="seg" id="water">
+            <label><input type="radio" name="water" value="Good" checked><span>Good</span></label>
+            <label><input type="radio" name="water" value="Doubtful"><span>Doubtful</span></label>
+            <label><input type="radio" name="water" value="Contaminated"><span>Contaminated</span></label>
+          </div>
+        </fieldset>
+        <div class="field">
+          <label for="reportDate">Report date</label>
+          <input id="reportDate" type="date">
+        </div>
+        <div class="field span2">
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" rows="2" maxlength="300" placeholder="For example: well near the school looks muddy"></textarea>
+        </div>
+        <p class="form-error span2" id="entryError" role="alert" hidden></p>
+        <div class="span2"><button class="btn btn-solid" type="submit" id="entryBtn">Save report</button></div>
+      </fieldset>
+    </form>
+  </div>
+
+  <aside class="side">
+    <div class="panel preview" id="preview" data-level="none">
+      <h2 class="h3">Risk preview</h2>
+      <p class="muted small">Updates as you type. The rising-trend point is added after saving.</p>
+      <div class="preview-level" id="pvLevel">Waiting for numbers</div>
+      <div class="preview-score" id="pvScore"></div>
+    </div>
+    <div class="panel result" id="result" hidden aria-live="polite">
+      <h2 class="h3">Report saved</h2>
+      <div class="badge" id="rsBadge"></div>
+      <p id="rsText"></p>
+      <ul class="breakdown" id="rsBreakdown"></ul>
+      <p class="advice" id="rsAdvice"></p>
+      <a class="btn btn-ghost btn-small" href="{{ url_for('pages.dashboard') }}">View on dashboard</a>
+    </div>
+  </aside>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/entry.js') }}"></script>{% endblock %}

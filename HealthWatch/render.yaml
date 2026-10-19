@@ -1,0 +1,22 @@
+# Free plan. Set DATABASE_URL to a free Neon PostgreSQL connection string so data
+# is kept permanently (see README). Without it, SQLite data is erased on restart.
+services:
+  - type: web
+    name: healthwatch
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 4 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: WORKER_PASSWORD
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: PRODUCTION
+        value: "1"

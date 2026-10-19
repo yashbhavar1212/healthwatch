@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}HealthWatch{% endblock %} | Smart Health Monitoring System</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2C16 2 6 13 6 20a10 10 0 0 0 20 0C26 13 16 2 16 2z' fill='%230f6e7a'/%3E%3Cpath d='M16 14v8M12 18h8' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body data-role="{{ current_user.role if current_user else '' }}">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="{{ url_for('pages.index') }}" aria-label="HealthWatch home">
+        <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M16 2C16 2 6 13 6 20a10 10 0 0 0 20 0C26 13 16 2 16 2z" fill="#0f6e7a"/><path d="M16 14v8M12 18h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span>HealthWatch</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <nav class="nav" id="nav" aria-label="Main">
+        <a href="{{ url_for('pages.index') }}" class="{{ 'on' if request.endpoint == 'pages.index' }}">Home</a>
+        {% if current_user %}
+        <a href="{{ url_for('pages.dashboard') }}" class="{{ 'on' if request.endpoint == 'pages.dashboard' }}">Dashboard</a>
+        <a href="{{ url_for('pages.entry') }}" class="{{ 'on' if request.endpoint == 'pages.entry' }}">Report cases</a>
+        <a href="{{ url_for('pages.records') }}" class="{{ 'on' if request.endpoint == 'pages.records' }}">Records</a>
+        {% endif %}
+        {% if current_user %}
+        <span class="who" title="{{ current_user.full_name }}">{{ current_user.username }} <small>{{ current_user.role }}</small></span>
+        <button class="btn btn-small btn-ghost" id="logout">Sign out</button>
+        {% else %}
+        <a class="btn btn-small btn-solid" href="{{ url_for('pages.login') }}">Sign in</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+  <main id="main">{% block content %}{% endblock %}</main>
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

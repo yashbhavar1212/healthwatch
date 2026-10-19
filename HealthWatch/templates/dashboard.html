@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="wrap page-pad">
+  <div class="page-head">
+    <div>
+      <h1 class="h1">Dashboard</h1>
+      <p class="lead">Latest status of every village. <span id="stamp" class="muted"></span></p>
+    </div>
+    <button class="btn btn-ghost" id="refresh">Refresh</button>
+  </div>
+
+  <div class="tiles">
+    <div class="tile" id="t-alert" data-level="none"><span class="tile-label">Villages on High or Critical</span><strong id="v-alert">-</strong><small id="s-alert"></small></div>
+    <div class="tile"><span class="tile-label">Diarrhea cases, last 7 days</span><strong id="v-cases">-</strong><small id="s-cases"></small></div>
+    <div class="tile"><span class="tile-label">Villages reporting</span><strong id="v-report">-</strong><small id="s-report"></small></div>
+    <div class="tile"><span class="tile-label">Open alerts</span><strong id="v-open">-</strong><small>Waiting for acknowledgement</small></div>
+  </div>
+
+  <div class="panel mt">
+    <h2 class="h3">Alerts</h2>
+    <ul class="alerts" id="alerts"><li class="empty">Loading...</li></ul>
+  </div>
+
+  <div class="grid-2 mt">
+    <div class="panel">
+      <h2 class="h3">Cases over the last 30 days</h2>
+      <div class="chart-box"><canvas id="lineChart" aria-label="Line chart of daily diarrhea and fever cases" role="img"></canvas><p class="chart-empty" id="e-line" hidden>No reports in the last 30 days.</p></div>
+    </div>
+    <div class="panel">
+      <h2 class="h3">Villages by risk level</h2>
+      <div class="chart-box"><canvas id="doughnut" aria-label="Doughnut chart of villages by risk level" role="img"></canvas><p class="chart-empty" id="e-dough" hidden>Add a village and a report to see risk levels.</p></div>
+    </div>
+  </div>
+
+  <div class="grid-2 mt rev">
+    <div class="panel">
+      <h2 class="h3">Risk score by village</h2>
+      <div class="chart-box tall"><canvas id="barChart" aria-label="Bar chart of risk score per village" role="img"></canvas><p class="chart-empty" id="e-bar" hidden>Risk scores appear after the first report.</p></div>
+    </div>
+    <div class="panel flush">
+      <div class="panel-head"><h2 class="h3">Village status</h2></div>
+      <div class="table-wrap">
+        <table class="data compact">
+          <thead><tr><th>Village</th><th class="num">Diarrhea</th><th>Trend</th><th>Risk</th></tr></thead>
+          <tbody id="status"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Records{% endblock %}
+{% block content %}
+<section class="wrap page-pad">
+  <div class="page-head">
+    <div>
+      <h1 class="h1">Records</h1>
+      <p class="lead" id="recCount">Loading...</p>
+    </div>
+    <a class="btn btn-ghost" id="exportBtn" href="/api/export.csv">Download CSV</a>
+  </div>
+
+  <form class="panel filters" id="filters">
+    <div class="field"><label for="f-q">Village name</label><input id="f-q" placeholder="Search"></div>
+    <div class="field"><label for="f-risk">Risk level</label>
+      <select id="f-risk"><option value="">All levels</option><option>Low</option><option>Moderate</option><option>High</option><option>Critical</option></select></div>
+    <div class="field"><label for="f-from">From</label><input id="f-from" type="date"></div>
+    <div class="field"><label for="f-to">To</label><input id="f-to" type="date"></div>
+    <div class="field filter-actions">
+      <button class="btn btn-solid" type="submit">Apply</button>
+      <button class="btn btn-ghost" type="button" id="clearFilters">Clear</button>
+    </div>
+  </form>
+
+  <div class="panel flush">
+    <div class="table-wrap">
+      <table class="data" id="recTable">
+        <thead><tr>
+          <th>Date</th><th>Village</th><th class="num">Diarrhea</th><th class="num">Fever</th>
+          <th>Rainfall</th><th>Water</th><th class="num">Score</th><th>Risk</th><th>Reported by</th>
+          {% if current_user and current_user.role == 'admin' %}<th><span class="sr">Actions</span></th>{% endif %}
+        </tr></thead>
+        <tbody id="recBody"></tbody>
+      </table>
+    </div>
+    <div class="pager" id="pager"></div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/records.js') }}"></script>{% endblock %}

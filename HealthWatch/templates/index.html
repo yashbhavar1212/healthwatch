@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Early warning for water-borne disease{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1 class="display">Catch a water-borne outbreak while it is still a few cases</h1>
+      <p class="hero-lead">Village health workers report diarrhea and fever counts each day. HealthWatch scores the risk, charts the trend and alerts the district officer, so action starts before cases multiply.</p>
+      <div class="hero-actions">
+        {% if current_user %}
+        <a class="btn btn-light" href="{{ url_for('pages.dashboard') }}">Open dashboard</a>
+        <a class="btn btn-outline" href="{{ url_for('pages.entry') }}">Report cases</a>
+        {% else %}
+        <a class="btn btn-light" href="{{ url_for('pages.login') }}">Sign in to report cases</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="assessor panel" id="assessor" data-level="low" aria-labelledby="assessTitle">
+      <h2 class="h3" id="assessTitle">Try the risk check</h2>
+      <p class="muted small">Move the sliders. This is the same scoring the dashboard uses.</p>
+      <div class="gauge">
+        <svg viewBox="0 0 200 118" aria-hidden="true">
+          <path class="gauge-track" d="M10 108 A90 90 0 0 1 190 108" pathLength="100"/>
+          <path class="gauge-arc" id="gaugeArc" d="M10 108 A90 90 0 0 1 190 108" pathLength="100"/>
+        </svg>
+        <div class="gauge-read">
+          <span class="gauge-score" id="gScore">0</span>
+          <span class="gauge-level" id="gLevel">Low</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="a-diarrhea">Diarrhea cases today <output id="o-diarrhea">8</output></label>
+        <input type="range" id="a-diarrhea" min="0" max="60" value="8">
+      </div>
+      <div class="field">
+        <label for="a-fever">Fever cases today <output id="o-fever">12</output></label>
+        <input type="range" id="a-fever" min="0" max="100" value="12">
+      </div>
+      <fieldset class="field">
+        <legend>Rainfall this week</legend>
+        <div class="seg" id="a-rain">
+          <label><input type="radio" name="a-rain" value="Low"><span>Low</span></label>
+          <label><input type="radio" name="a-rain" value="Medium" checked><span>Medium</span></label>
+          <label><input type="radio" name="a-rain" value="High"><span>High</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>Drinking water</legend>
+        <div class="seg" id="a-water">
+          <label><input type="radio" name="a-water" value="Good" checked><span>Good</span></label>
+          <label><input type="radio" name="a-water" value="Doubtful"><span>Doubtful</span></label>
+          <label><input type="radio" name="a-water" value="Contaminated"><span>Contaminated</span></label>
+        </div>
+      </fieldset>
+      <ul class="breakdown" id="breakdown"></ul>
+      <p class="advice" id="advice"></p>
+    </div>
+  </div>
+</section>
+
+<section class="strip" aria-label="Live status">
+  <div class="wrap strip-grid" id="overview">
+    <div><strong id="ov-villages">-</strong><span>villages monitored</span></div>
+    <div><strong id="ov-alert">-</strong><span>on High or Critical alert</span></div>
+    <div><strong id="ov-reports">-</strong><span>reports in the last 7 days</span></div>
+    <div><strong id="ov-last">-</strong><span>latest report</span></div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <h2 class="h2">What happens to one report</h2>
+  <ol class="steps">
+    <li>
+      <h3 class="h3">The health worker reports</h3>
+      <p>Village, diarrhea and fever cases, rainfall and the state of drinking water. It takes under a minute on a phone.</p>
+    </li>
+    <li>
+      <h3 class="h3">The system scores it</h3>
+      <p>Points are added for each factor, plus one more if cases are rising compared with the last report. The total becomes Low, Moderate, High or Critical.</p>
+    </li>
+    <li>
+      <h3 class="h3">Officers see it and act</h3>
+      <p>The village shows as High or Critical on the dashboard, an alert appears, and an e-mail can go out. Each alert says what to do next.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="wrap section cta-band">
+  <div>
+    <h2 class="h2">Built for the people closest to the water</h2>
+    <p class="lead">Plain forms, clear colours and advice in simple words. No training needed to read a red village.</p>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/home.js') }}"></script>{% endblock %}
